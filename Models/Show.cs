@@ -16,7 +16,10 @@
         public ShowImage? Image { get; set; }
         public ShowRating? Rating { get; set; }
         public string? Status { get; set; }
+        public string? Premiered { get; set; }
+        public string? Ended { get; set; }
         public List<string>? Genres { get; set; }
+        public int? Runtime { get; set; }
     }
 
     public class ShowImage

@@ -1,21 +1,43 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
-
+<MudThemeProvider Theme="@myTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudPopoverProvider />
 
 <MudLayout>
-    <MudAppBar Color="Color.Primary" Elevation="4" Class="mud-appbar-fixed">
-        <MudLink Href="/" Color="Color.Inherit" Underline="Underline.None">
-            <MudText Typo="Typo.h6">TVMaze Browser</MudText>
-        </MudLink>
+    <MudAppBar Color="Color.Primary" Elevation="4" Dense="true" Class="top-appbar">
+        <div class="appbar-brand">
+            <MudIcon Icon="@Icons.Material.Filled.LiveTv" Size="Size.Medium" Class="app-logo" />
+            <MudLink Href="/" Color="Color.Inherit" Underline="Underline.None">
+                <MudText Typo="Typo.h5" Class="app-title">TVMaze Browser</MudText>
+            </MudLink>
+        </div>
     </MudAppBar>
-
     <MudMainContent>
         <div class="content px-4 py-4 mud-appbar-offset">
             @Body
         </div>
     </MudMainContent>
 </MudLayout>
+
+
+
+@code {
+    MudTheme myTheme = new MudTheme()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Primary = "#0033d9",
+            PrimaryDarken = "#0027a9",
+            PrimaryLighten = "#335be3",
+            Secondary = "#26a69a",
+            Info = "#0288d1",
+            Success = "#2e7d32",
+            Warning = "#ed6c02",
+            Error = "#d32f2f",
+            AppbarBackground = "#0033d9",
+            AppbarText = "#ffffff"
+        }
+    };
+}

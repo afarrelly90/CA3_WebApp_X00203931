@@ -1,42 +1,75 @@
 ﻿@page "/show/{id:int}"
 @inject TVService TvService
-
-<h3>Show Details Coming Soon</h3>
-
-<MudPaper Class="p-4">
+@inject NavigationManager Navigation
+<MudPaper Class="p-6 mx-auto" Style="max-width:1200px;">
     @if (isLoading)
     {
-        <div class="loading">Loading show...</div>
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
     }
-    else if (!string.IsNullOrEmpty(errorMessage))
+    else if (!string.IsNullOrEmpty(errorMessage)) // other error messages besides show not existing
     {
-        <p class="text-danger">@errorMessage</p>
+        <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Class="mt-3">
+            <MudText Typo="Typo.h6">@errorMessage</MudText>
+            <MudButton Color="Color.Primary" Variant="Variant.Outlined" Class="mt-2" OnClick="GoBack">
+                Back to Search
+            </MudButton>
+        </MudAlert>
     }
-    else if (show is null)
+    else if (show is null) // show doesnt exist
     {
-        <p>No show found.</p>
+        <MudAlert Severity="Severity.Warning" Variant="Variant.Filled">
+            <MudText Typo="Typo.h6">We couldn’t find details for this show.</MudText>
+            <MudButton Color="Color.Primary" Variant="Variant.Outlined" Class="mt-2" OnClick="GoBack">
+                Back to Search
+            </MudButton>
+        </MudAlert>
     }
     else
     {
-        <div class="show-details">
-            <h2>@show.Name</h2>
-            <div class="show-meta">
-                <img src="@(show.Image?.Original ?? show.Image?.Medium ?? string.Empty)" alt="@show.Name"
-                     style="max-width:300px; width:100%; height:auto; object-fit:cover;" />
-                <br />
+        <MudStack Spacing="3">
+            <MudText Typo="Typo.h4">@show.Name</MudText>
+            <MudGrid>
+                <MudItem xs="12" md="4">
+                    <img src="@(show.Image?.Original ?? show.Image?.Medium ?? "")" alt="@show.Name" class="show-details-poster" />
+                </MudItem>
+                <MudItem xs="12" md="8">
+                    <MudStack Spacing="1">
+                        @if (show.Rating?.Average != null)
+                        {
+                            var stars = (int)(show.Rating.Average.Value / 2);
+                            <div class="rating-line details-rating">
+                                <MudRating SelectedValue="@stars" MaxValue="5" ReadOnly="true" Size="Size.Medium" Class="static-rating" />
+                                <span class="rating-number">(@show.Rating.Average.Value.ToString("0.0"))</span>
+                            </div>
+                        }
+                        <MudChip T="string" Color="@GetStatusColor(show.Status)" Variant="Variant.Filled" Size="Size.Small">
+                            @show.Status
+                        </MudChip>
+                        @{
+                            var premiered = show.Premiered != null ? DateTime.Parse(show.Premiered).Year.ToString() : "?";
+                            var ended = show.Ended != null ? DateTime.Parse(show.Ended).Year.ToString() : "";
+                            var years = string.IsNullOrEmpty(ended) ? $"{premiered}–" : $"{premiered}–{ended}";
+                        }
 
-                <div class="show-info">
-                    <p>@((MarkupString)show.Summary)</p>
-                </div>
-            </div>
-        </div>
+                        <MudText Typo="Typo.subtitle2"><b>Years:</b> @years</MudText>
+                        @if (show.Genres != null && show.Genres.Any())
+                        {
+                            <MudText Typo="Typo.subtitle2"><b>Genres:</b> @string.Join(", ", show.Genres)</MudText>
+                        }
+                        @if (show.Runtime != null)
+                        {
+                            <MudText Typo="Typo.subtitle2"><b>Runtime:</b> @show.Runtime min</MudText>
+                        }
+                    </MudStack>
+                </MudItem>
+                <MudText Typo="Typo.body1" Class="show-summary">@((MarkupString)show.Summary)</MudText>
+            </MudGrid>
+        </MudStack>
     }
 </MudPaper>
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
-
+    [Parameter] public int Id { get; set; }
     Show? show;
     bool isLoading = true;
     string? errorMessage;
@@ -45,18 +78,40 @@
     {
         isLoading = true;
         errorMessage = null;
-        show = null;
-        try
+        try { show = await TvService.GetShowAsync(Id); }
+        catch (HttpRequestException httpEx)
         {
-            show = await TvService.GetShowAsync(Id);
+            if (httpEx.StatusCode == System.Net.HttpStatusCode.NotFound)
+                errorMessage = "This show does not exist. Please try a different one.";
+            else
+                errorMessage = "There was an issue contacting the TVMaze service. Please try again later.";
         }
-        catch (Exception ex)
+        catch (TaskCanceledException)
         {
-            errorMessage = ex.Message;
+            errorMessage = "The request timed out. Please check your internet connection and try again.";
         }
-        finally
+        catch (Exception)
         {
-            isLoading = false;
+            errorMessage = "An unexpected error occurred while loading this show.";
         }
+
+
+
+        isLoading = false;
     }
+
+    Color GetStatusColor(string? status) =>
+        status switch
+        {
+            "Running" => Color.Success,
+            "Ended" => Color.Error,
+            "To Be Determined" => Color.Warning,
+            _ => Color.Info
+        };
+
+    void GoBack()
+    {
+        Navigation.NavigateTo("/");
+    }
+
 }
