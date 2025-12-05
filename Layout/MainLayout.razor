@@ -1,3 +1,21 @@
 ﻿@inherits LayoutComponentBase
 
-@Body
+<MudThemeProvider />
+
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+
+<MudLayout>
+    <MudAppBar Color="Color.Primary" Elevation="4" Class="mud-appbar-fixed">
+        <MudLink Href="/" Color="Color.Inherit" Underline="Underline.None">
+            <MudText Typo="Typo.h6">TVMaze Browser</MudText>
+        </MudLink>
+    </MudAppBar>
+
+    <MudMainContent>
+        <div class="content px-4 py-4 mud-appbar-offset">
+            @Body
+        </div>
+    </MudMainContent>
+</MudLayout>

@@ -1,7 +1,211 @@
 ﻿@page "/"
+@inject TVService TvService
+@inject NavigationManager Nav
 
-<PageTitle>Home</PageTitle>
+<div class="main-container">
 
-<h1>Hello, world!</h1>
+    <h3>Search for a TV show</h3>
 
-Welcome to your new app.
+    <MudTextField Label="Search for a TV Show"
+                  @bind-Value="searchTerm"
+                  Variant="Variant.Filled"
+                  Class="mb-2" />
+
+    <div class="filter-panel">
+        <MudGrid Class="filter-grid">
+            <MudItem xs="8" sm="6" md="4">
+                <MudNumericField T="int?"
+                                 Label="Minimum Rating"
+                                 Variant="Variant.Outlined"
+                                 @bind-Value="minRating"
+                                 Min="0"
+                                 Max="10"
+                                 Immediate="true"
+                                 Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect T="ShowStatus"
+                           Label="Show Status"
+                           Variant="Variant.Outlined"
+                           @bind-Value="selectedStatus">
+
+                    <MudSelectItem T="ShowStatus" Value="ShowStatus.All">All</MudSelectItem>
+                    <MudSelectItem T="ShowStatus" Value="ShowStatus.Running">Running</MudSelectItem>
+                    <MudSelectItem T="ShowStatus" Value="ShowStatus.Ended">Ended</MudSelectItem>
+                    <MudSelectItem T="ShowStatus" Value="ShowStatus.ToBeDetermined">To Be Determined</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+    </div>
+    <MudButton Color="Color.Primary"
+               Variant="Variant.Filled"
+               OnClick="Search">
+        Search
+    </MudButton>
+    <MudDivider Class="my-3" />
+
+
+
+    @if (isLoading)
+    {
+        <MudGrid Class="mt-3">
+            @for (int i = 0; i < 6; i++)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudText Typo="Typo.h6">Loading...</MudText>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMsg))
+    {
+        <p class="text-danger">@errorMsg</p>
+    }
+
+    @if (filteredResults != null)
+    {
+        <MudGrid Class="mt-3">
+            @foreach (var r in filteredResults)
+            {
+                var id = r.Show?.Id;
+                var medium = r.Show?.Image?.Medium;
+                var original = r.Show?.Image?.Original;
+                var src = original ?? medium ?? string.Empty;
+
+                var name = r.Show?.Name ?? "Unknown";
+                var rawRating = r.Show?.Rating?.Average;
+                var hasRating = rawRating.HasValue && rawRating.Value >= 0.5;
+
+                var rating = hasRating ? rawRating.Value.ToString("0.0") : "N/A";
+                var stars = hasRating ? (int)(rawRating.Value / 2) : 0;
+                var status = r.Show?.Status ?? "Unknown";
+
+                <MudItem xs="12" sm="6" md="3">
+                    <MudCard Class="show-card" Style="cursor:pointer;"
+                             @onclick="() => GoToShow(id)">
+
+                        <div class="image-container">
+                            <img src="@src"
+                                 alt="@name"
+                                 class="show-image" />
+                        </div>
+
+                        <MudCardContent class="card-body">
+                            <MudStack Direction="Column" Spacing="1">
+
+                                <MudText Typo="Typo.subtitle2" Class="show-title">
+                                    @name
+                                </MudText>
+
+                                <MudStack Direction="Row" AlignItems="AlignItems.Center" Spacing="1" Class="rating-row">
+
+                                    <MudRating SelectedValue="@stars"
+                                               MaxValue="5"
+                                               ReadOnly="true"
+                                               Size="Size.Small" />
+
+                                    <MudText Typo="Typo.caption" Style="margin-left:4px;">
+                                        @rating
+                                    </MudText>
+
+                                </MudStack>
+
+
+                                <MudChip T="string" Color="@GetStatusColor(status)"
+                                         Variant="Variant.Filled"
+                                         Size="Size.Small">
+                                    @status
+                                </MudChip>
+
+                            </MudStack>
+                        </MudCardContent>
+
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+
+
+
+</div>
+
+@code {
+    string searchTerm = "";
+    bool isLoading = false;
+    string? errorMsg = null;
+    int? minRating = null;
+    ShowStatus selectedStatus = ShowStatus.All;
+    List<SearchResult>? filteredResults;
+
+    List<SearchResult>? results;
+    private async Task Search()
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            errorMsg = "Search cannot be empty, please enter a show name.";
+            return;
+        }
+
+        errorMsg = null;
+        isLoading = true;
+
+        results = await TvService.SearchShowsAsync(searchTerm);
+        ApplyFilters();
+
+        isLoading = false;
+    }
+
+    void ApplyFilters()
+    {
+        if (results == null)
+            return;
+
+        filteredResults = results;
+
+        if (minRating.HasValue)
+        {
+            filteredResults = filteredResults
+                .Where(r => r.Show?.Rating?.Average >= minRating.Value)
+                .ToList();
+        }
+
+        if (selectedStatus != ShowStatus.All)
+        {
+            var statusString = selectedStatus switch
+            {
+                ShowStatus.Running => "Running",
+                ShowStatus.Ended => "Ended",
+                ShowStatus.ToBeDetermined => "To Be Determined",
+                _ => null
+            };
+
+            if (statusString != null)
+            {
+                filteredResults = filteredResults
+                    .Where(r => string.Equals(r.Show?.Status, statusString, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+        }
+
+    }
+
+    void GoToShow(int? id)
+    {
+        Console.WriteLine($"Clicked card with ID: {id}");
+
+        if (id.HasValue)
+            Nav.NavigateTo($"/show/{id.Value}");
+    }
+
+    Color GetStatusColor(string status) =>
+    status switch
+    {
+        "Running" => Color.Success,
+        "Ended" => Color.Error,
+        "To Be Determined" => Color.Warning,
+        _ => Color.Info
+    };
+
+}

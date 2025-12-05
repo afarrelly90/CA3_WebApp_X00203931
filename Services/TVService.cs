@@ -1,5 +1,5 @@
-﻿using System.Net.Http.Json;
-using CA3_WebApp.Models;
+﻿using CA3_WebApp.Models;
+using System.Net.Http.Json;
 
 namespace CA3_WebApp.Services
 {
@@ -18,6 +18,12 @@ namespace CA3_WebApp.Services
                 return null;
 
             return await _http.GetFromJsonAsync<List<SearchResult>>($"search/shows?q={query}");
+        }
+
+        public async Task<Show?> GetShowAsync(int id)
+        {
+            if (id <= 0) return null;
+            return await _http.GetFromJsonAsync<Show>($"shows/{id}");
         }
     }
 }

@@ -1,0 +1,62 @@
+﻿@page "/show/{id:int}"
+@inject TVService TvService
+
+<h3>Show Details Coming Soon</h3>
+
+<MudPaper Class="p-4">
+    @if (isLoading)
+    {
+        <div class="loading">Loading show...</div>
+    }
+    else if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p class="text-danger">@errorMessage</p>
+    }
+    else if (show is null)
+    {
+        <p>No show found.</p>
+    }
+    else
+    {
+        <div class="show-details">
+            <h2>@show.Name</h2>
+            <div class="show-meta">
+                <img src="@(show.Image?.Original ?? show.Image?.Medium ?? string.Empty)" alt="@show.Name"
+                     style="max-width:300px; width:100%; height:auto; object-fit:cover;" />
+                <br />
+
+                <div class="show-info">
+                    <p>@((MarkupString)show.Summary)</p>
+                </div>
+            </div>
+        </div>
+    }
+</MudPaper>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    Show? show;
+    bool isLoading = true;
+    string? errorMessage;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        isLoading = true;
+        errorMessage = null;
+        show = null;
+        try
+        {
+            show = await TvService.GetShowAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
