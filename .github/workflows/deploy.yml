@@ -18,7 +18,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Publish .NET Core app
-        run: dotnet publish CA3_WebApp_X00203931.csproj -c Release -o release
+        run: dotnet publish CA3_WebApp/CA3_WebApp_X00203931.csproj -c Release -o release
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
