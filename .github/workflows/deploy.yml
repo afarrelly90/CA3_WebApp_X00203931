@@ -17,19 +17,28 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Build .NET app
+      - name: Code Quality Check
+        run: dotnet format --verify-no-changes
+
+      - name: Build webapp
         run: dotnet build CA3_WebApp.csproj --configuration Release
 
-      - name: Publish .NET app
+      - name: Publish webapp
         run: dotnet publish CA3_WebApp.csproj -c Release -o build
 
-      - name: Rewrite base href
-        run: sed -i 's|<base href="" />|<base href="/CA3_WebApp_X00203931/" />|' build/wwwroot/index.html
+      - name: Rewrite base href # overrite base href in index.html so that deployed version base ref matches 
+        run: sed -i 's|<base href="/" />|<base href="/CA3_WebApp_X00203931/" />|' build/wwwroot/index.html
 
-      # - name: Create 404.html for SPA routing
-      #   run: cp build/wwwroot/index.html build/wwwroot/404.html
+      - name: Install Playwright 
+        run: dotnet tool install --global Microsoft.Playwright.CLI
 
-      - name: Upload to GitHub Pages
+      - name: Install Playwright Browsers
+        run: playwright install --with-deps
+
+      - name: Run E2E Tests
+        run: dotnet test CA3_E2E_Tests/CA3_E2E_Tests.csproj --configuration Release
+
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build/wwwroot
