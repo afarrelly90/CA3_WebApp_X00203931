@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+	<ItemGroup>
+		<Compile Remove="CA3_E2E_Tests\**\*.cs" />
+	</ItemGroup>
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>

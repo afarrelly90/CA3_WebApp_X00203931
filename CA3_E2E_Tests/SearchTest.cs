@@ -30,10 +30,12 @@ public class SearchTests
         var page = await browser.NewPageAsync();
 
         await page.GotoAsync("https://afarrelly90.github.io/CA3_WebApp_X00203931/");
+        // find tv show search input and search for 'the wire'
         await page.WaitForSelectorAsync("text=Search for a TV show");
         await page.GetByLabel("Search for a TV Show").FillAsync("the wire");
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
+        // confirm the page loads and shows atleast 1 show
         await page.Locator(".show-card").First.WaitForAsync();
         await page.Locator(".show-card").First.ClickAsync();
 
