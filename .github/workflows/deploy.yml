@@ -18,7 +18,10 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Publish .NET app
-        run: dotnet publish CA3_WebApp.csproj -c Release -o release /p:StaticWebAssetsBasePath=/CA3_WebApp_X00203931/
+        run: dotnet publish CA3_WebApp.csproj -c Release -o build
+
+      - name: Rewrite base href
+        run: sed -i 's|<base href="/" />|<base href="/CA3_WebApp_X00203931/" />|' build/wwwroot/index.html
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
