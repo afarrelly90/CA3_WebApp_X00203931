@@ -4,7 +4,6 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<StaticWebAssetBasePath>CA3_WebApp_X00203931</StaticWebAssetBasePath>
 	</PropertyGroup>
 
 	<ItemGroup>
