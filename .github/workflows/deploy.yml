@@ -20,8 +20,8 @@ jobs:
       - name: Publish .NET app
         run: dotnet publish CA3_WebApp.csproj -c Release -o build
 
-      - name: Rewrite base href
-        run: sed -i 's|<base href="/" />|<base href="/CA3_WebApp_X00203931/" />|' build/wwwroot/index.html
+      # - name: Rewrite base href
+      #   run: sed -i 's|<base href="/" />|<base href="/CA3_WebApp_X00203931/" />|' build/wwwroot/index.html
 
       - name: Disable Jekyll
         run: touch build/wwwroot/.nojekyll
