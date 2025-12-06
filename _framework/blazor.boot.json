@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "CA3_WebApp",
   "resources": {
-    "hash": "sha256-v7CJ7td8TJhMieETalHo8+7hXoEzdUDhDjqLsmTmuNc=",
+    "hash": "sha256-+8yzkbBqXeOUj87SCEEyun4fi1++3A/4IdtqOI6D1E8=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-vtotCeXt2UD6oc459laJT32vBgigZ+eLoUmdeFkvYDk="
     },
@@ -54,13 +54,13 @@
       "System.ObjectModel.wasm": "sha256-mlwQq1sMWVJzPTsA3C1oamVBniHySALAJpIzn+oyMSc=",
       "System.Private.Uri.wasm": "sha256-JAPiLJarOP4pFqNalQXar6IOU0fsXoCnWp/Sh0OX8IA=",
       "System.Runtime.InteropServices.JavaScript.wasm": "sha256-obpfktlMMZRd/6+94Eqsz43u4IBXSwphEA0oRmrGRrE=",
-      "System.Runtime.wasm": "sha256-C+aJFQLOoSZEd2ubi6vUz2t14+vNUl6/cnnIlXmMBFk=",
+      "System.Runtime.wasm": "sha256-w/Sj1lGHzX88dvGRjZ3P0C/XwHg7NFhfwwYwsHTz14c=",
       "System.Text.Encodings.Web.wasm": "sha256-ZfCb2TSGxncfpyCkdqhIDqbsmxhl1+L2kv26ZWtTdWE=",
       "System.Text.Json.wasm": "sha256-0El6s7Re6rbjs4nkS1Htp9edemqFasOD2gkPTvlqhBk=",
       "System.Text.RegularExpressions.wasm": "sha256-hUbx2lqvPBP5DwGLpoYdHuGbbBtIRZ3dfbcX5PFPi1c=",
       "System.wasm": "sha256-I4hhyMuUoHdrzDopL9tlnkL/Skg+0OO+gmkOXNT3dcg=",
-      "System.Private.CoreLib.wasm": "sha256-ntc3kAkaFGLDEn7IRpMofc1FGMw+oVeuHu/dVsFxCiU=",
-      "CA3_WebApp.wasm": "sha256-/wqzXOuDfbdBOmmchS4gEwdz7u6hjWOoAaZNC74YxGs="
+      "System.Private.CoreLib.wasm": "sha256-4WYPltPsrjQhbB23fl7EqHOpBtIpLBWVYlZpAV0/Kxo=",
+      "CA3_WebApp.wasm": "sha256-x54irDCxWhCEKZB1QA6Jmp+vi+blN6Mvx+NnZWnperg="
     }
   },
   "cacheBootResources": true,
