@@ -149,6 +149,11 @@
     {
         q = q?.Trim();
 
+        if (string.IsNullOrWhiteSpace(q))
+        {
+            errorMsg = "Please enter something to search.";
+            return;
+        }
         if (q.Length > 50)
         {
             errorMsg = "Search term is too long (max 50 characters).";
