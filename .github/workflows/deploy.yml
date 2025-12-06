@@ -18,7 +18,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Publish .NET app
-        run: dotnet publish CA3_WebApp.csproj -c Release -o release /p:StaticWebAssetBasePath=/CA3_WebApp_X00203931/
+        run: dotnet publish CA3_WebApp.csproj -c Release -o release /p:StaticWebAssetsBasePath=CA3_WebApp_X00203931
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
