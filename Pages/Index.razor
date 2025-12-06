@@ -7,23 +7,26 @@
     <h3>Search for a TV show</h3>
 
     <MudTextField Label="Search for a TV Show"
-                  @bind-Value="q"
-                  Variant="Variant.Filled"
-                  Class="mb-2" />
+                    @bind-Value="q"
+                    Variant="Variant.Filled"
+                    MaxLength="50"
+                    HelperText="Enter up to 50 characters."
+                    Class="mb-2" />
 
     <div class="filter-panel">
         <MudGrid Class="filter-grid">
             <MudItem xs="8" sm="6" md="4">
                 <MudNumericField T="double?"
-                            Label="Minimum Rating"
-                            Variant="Variant.Outlined"
-                            @bind-Value="minRating"
-                            Min="0"
-                            Max="10"
-                            Step="0.1"
-                            Format="0.0"
-                            Immediate="true"
-                            Class="mb-3" />
+                    Label="Minimum Rating"
+                    Variant="Variant.Outlined"
+                    @bind-Value="minRating"
+                    Min="0"
+                    Max="10"
+                    Step="0.1"
+                    Format="0.0"
+                    Immediate="true"
+                    HelperText="Enter a number between 0 and 10"
+                    Class="mb-3" />
             </MudItem>
 
             <MudItem xs="12" sm="6" md="4">
@@ -144,6 +147,13 @@
 
     void Search()
     {
+        q = q?.Trim();
+
+        if (q.Length > 50)
+        {
+            errorMsg = "Search term is too long (max 50 characters).";
+            return;
+        }
         errorMsg = null;
         var url = $"?q={q}&r={minRating}&s={selectedStatus}";
         Nav.NavigateTo(url);
