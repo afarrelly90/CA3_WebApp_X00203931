@@ -143,7 +143,7 @@
     void Search()
     {
         errorMsg = null;
-        var url = $"/?q={q}&r={minRating}&s={selectedStatus}";
+        var url = $"?q={q}&r={minRating}&s={selectedStatus}";
         Nav.NavigateTo(url);
     }
 
@@ -229,7 +229,7 @@
     void GoToShow(int? id)
     {
         if (id.HasValue)
-            Nav.NavigateTo($"/show/{id.Value}");
+            Nav.NavigateTo($"show/{id.Value}");
     }
 
     Color GetStatusColor(string status) =>
