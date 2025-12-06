@@ -23,6 +23,9 @@ jobs:
       - name: Rewrite base href
         run: sed -i 's|<base href="/" />|<base href="/CA3_WebApp_X00203931/" />|' build/wwwroot/index.html
 
+      - name: Disable Jekyll
+        run: touch release/wwwroot/.nojekyll
+
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
