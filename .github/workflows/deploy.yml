@@ -29,10 +29,11 @@ jobs:
       - name: Rewrite base href # overrite base href in index.html so that deployed version base ref matches 
         run: sed -i 's|<base href="/" />|<base href="/CA3_WebApp_X00203931/" />|' build/wwwroot/index.html
 
-      - name: Install Playwright 
+      - name: Install Playwright
         run: dotnet tool install --global Microsoft.Playwright.CLI
 
       - name: Install Playwright Browsers
+        working-directory: CA3_E2E_Tests
         run: playwright install --with-deps
 
       - name: Run E2E Tests
