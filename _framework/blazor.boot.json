@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "CA3_WebApp",
   "resources": {
-    "hash": "sha256-B5QHQrlceUXnUXi3FYOd44ov8uIAh9KCQ5UtoT7o7fY=",
+    "hash": "sha256-O3+5ZWYiWEJHOWmMhD3dZ1zDAi2/JByPKg5wSFVIDSw=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-vtotCeXt2UD6oc459laJT32vBgigZ+eLoUmdeFkvYDk="
     },
@@ -60,7 +60,7 @@
       "System.Text.RegularExpressions.wasm": "sha256-hUbx2lqvPBP5DwGLpoYdHuGbbBtIRZ3dfbcX5PFPi1c=",
       "System.wasm": "sha256-I4hhyMuUoHdrzDopL9tlnkL/Skg+0OO+gmkOXNT3dcg=",
       "System.Private.CoreLib.wasm": "sha256-ntc3kAkaFGLDEn7IRpMofc1FGMw+oVeuHu/dVsFxCiU=",
-      "CA3_WebApp.wasm": "sha256-5R0Q/26hlI1+qe4DS6AJBa42vLwFdg4RgHE1Ox1Atmg="
+      "CA3_WebApp.wasm": "sha256-kLNVb7Jn/5Wc+2D+nweXX9qD8RxjcrfJ30QciiNy1C8="
     }
   },
   "cacheBootResources": true,
