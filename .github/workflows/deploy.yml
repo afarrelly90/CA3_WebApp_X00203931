@@ -18,7 +18,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Code Quality Check
-        run: dotnet format --verify-no-changes
+        run: dotnet format CA3_WebApp.csproj --verify-no-changes
 
       - name: Build webapp
         run: dotnet build CA3_WebApp.csproj --configuration Release
