@@ -30,7 +30,9 @@
             <MudText Typo="Typo.h4" Class="show-title">@show.Name</MudText>
             <MudGrid>
                 <MudItem xs="12" md="4">
-                    <img src="@(show.Image?.Original ?? show.Image?.Medium ?? "images/placeholder.jpg")" alt="@show.Name" class="show-details-poster" />
+                    <img src="@poster"
+                         alt="@show?.Name"
+                         class="show-details-poster" />
                 </MudItem>
                 <MudItem xs="12" md="8">
                     <MudStack Spacing="1">
@@ -73,12 +75,20 @@
     Show? show;
     bool isLoading = true;
     string? errorMessage;
+    string poster = "images/placeholder.jpg";
 
     protected override async Task OnParametersSetAsync()
     {
         isLoading = true;
         errorMessage = null;
-        try { show = await TvService.GetShowAsync(Id); }
+
+        try
+        {
+            show = await TvService.GetShowAsync(Id);
+            poster = show?.Image?.Original
+                  ?? show?.Image?.Medium
+                  ?? "images/placeholder.jpg";
+        }
         catch (HttpRequestException httpEx)
         {
             if (httpEx.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -95,8 +105,6 @@
             errorMessage = "An unexpected error occurred while loading this show.";
         }
 
-
-
         isLoading = false;
     }
 
@@ -109,9 +117,6 @@
             _ => Color.Info
         };
 
-    void GoBack()
-    {
-        Navigation.NavigateTo("");
-    }
-
+    void GoBack() => Navigation.NavigateTo("");
 }
+
