@@ -24,10 +24,10 @@ jobs:
         run: dotnet publish CA3_WebApp.csproj -c Release -o build
 
       - name: Rewrite base href
-        run: sed -i 's|<base href="/" />|<base href="/CA3_WebApp_X00203931/" />|' build/wwwroot/index.html
+        run: sed -i 's|<base href="" />|<base href="/CA3_WebApp_X00203931/" />|' build/wwwroot/index.html
 
-      - name: Create 404.html for SPA routing
-        run: cp build/wwwroot/index.html build/wwwroot/404.html
+      # - name: Create 404.html for SPA routing
+      #   run: cp build/wwwroot/index.html build/wwwroot/404.html
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4

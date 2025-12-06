@@ -27,7 +27,7 @@
     else
     {
         <MudStack Spacing="3">
-            <MudText Typo="Typo.h4">@show.Name</MudText>
+            <MudText Typo="Typo.h4" Class="show-title">@show.Name</MudText>
             <MudGrid>
                 <MudItem xs="12" md="4">
                     <img src="@(show.Image?.Original ?? show.Image?.Medium ?? "")" alt="@show.Name" class="show-details-poster" />
