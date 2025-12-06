@@ -17,6 +17,9 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Build .NET app
+        run: dotnet build CA3_WebApp.csproj --configuration Release
+
       - name: Publish .NET app
         run: dotnet publish CA3_WebApp.csproj -c Release -o build
 

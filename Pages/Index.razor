@@ -72,7 +72,7 @@
                 @foreach (var r in filteredResults)
                 {
                     var id = r.Show?.Id;
-                    var src = r.Show?.Image?.Original ?? r.Show?.Image?.Medium ?? "";
+                    var src = r.Show?.Image?.Original ?? r.Show?.Image?.Medium ?? "images/placeholder.jpg";
                     var rawRating = r.Show?.Rating?.Average;
                     var hasRating = rawRating.HasValue && rawRating.Value >= 0.5;
 
