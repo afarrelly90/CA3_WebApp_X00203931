@@ -14,14 +14,16 @@
     <div class="filter-panel">
         <MudGrid Class="filter-grid">
             <MudItem xs="8" sm="6" md="4">
-                <MudNumericField T="int?"
-                    Label="Minimum Rating"
-                    Variant="Variant.Outlined"
-                    @bind-Value="minRating"
-                    Min="0"
-                    Max="10"
-                    Immediate="true"
-                    Class="mb-3" />
+                <MudNumericField T="double?"
+                            Label="Minimum Rating"
+                            Variant="Variant.Outlined"
+                            @bind-Value="minRating"
+                            Min="0"
+                            Max="10"
+                            Step="0.1"
+                            Format="0.0"
+                            Immediate="true"
+                            Class="mb-3" />
             </MudItem>
 
             <MudItem xs="12" sm="6" md="4">
@@ -128,13 +130,13 @@
 
 @code {
     [Parameter, SupplyParameterFromQuery] public string? q { get; set; }
-    [Parameter, SupplyParameterFromQuery] public int? r { get; set; }
+    [Parameter, SupplyParameterFromQuery] public string? r { get; set; }
     [Parameter, SupplyParameterFromQuery] public string? s { get; set; }
 
     bool isLoading = false;
     string? errorMsg = null;
 
-    int? minRating = null;
+    double? minRating = null;
     ShowStatus selectedStatus = ShowStatus.All;
 
     List<SearchResult>? results;
@@ -175,15 +177,31 @@
             isLoading = true;
             results = await TvService.SearchShowsAsync(q);
 
-            if (r.HasValue && (r.Value < 0 || r.Value > 10))
+            if (!string.IsNullOrWhiteSpace(r))
             {
-                errorMsg = "Minimum rating must be between 0 and 10.";
-                minRating = null;
+                if (double.TryParse(r, out double parsed))
+                {
+                    if (parsed < 0 || parsed > 10)
+                    {
+                        errorMsg = "Minimum rating must be between 0 and 10.";
+                        minRating = null;
+                    }
+                    else
+                    {
+                        minRating = Math.Round(parsed, 1);
+                    }
+                }
+                else
+                {
+                    errorMsg = "Invalid rating, please enter a number between 0 and 10.";
+                    minRating = null;
+                }
             }
             else
             {
-                minRating = r;
+                minRating = null;
             }
+
 
             if (!string.IsNullOrWhiteSpace(s))
             {
