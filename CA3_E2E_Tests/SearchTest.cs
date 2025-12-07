@@ -4,7 +4,6 @@ using Xunit;
 public class SearchTests
 {
     private const string BaseUrl = "https://afarrelly90.github.io/CA3_WebApp_X00203931/";
-
     [Fact]
     public async Task Search_For_The_ShowsResults()
     {
